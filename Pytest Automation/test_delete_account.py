@@ -6,8 +6,8 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import Select
-
 import time
+
 def test_delete_account(browser):
     browser.get("https://www.automationexercise.com/")
     assert "Automation Exercise" in browser.title
@@ -32,8 +32,16 @@ def test_delete_account(browser):
             login_button.click()
             delete_acc_btn = WebDriverWait(browser, 10).until(EC.element_to_be_clickable((By.XPATH, "/html/body/header/div/div/div/div[2]/div/ul/li[5]/a")))
             delete_acc_btn.click()
+            deleted_msg = WebDriverWait(browser,10).until(EC.presence_of_element_located(By.XPATH, "//*[contains(text(), 'ACCOUNT DELETED!')]"))
+            page_source = browser.page_source
+            assert "ACCOUNT DELETED!" in page_source, "The account was not deleted. Test Failed"
+
     except Exception as e:
         print(f"Error while login: {e}")
+        assert False, "Test failed due to an error"
+
+
+
 
 
 
